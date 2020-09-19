@@ -12,7 +12,7 @@ const authRoutes = require('./routes/auth')
 const app = express()
 
 // db
-mongoose.connect(process.env.DATABASE_LOCAL, {
+mongoose.connect(process.env.DATABASE_CLOUD, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
