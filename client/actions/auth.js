@@ -99,3 +99,33 @@ export const isAuth = () => {
         }
     }
 };
+
+export const loginWithGoogle = user => {
+    return fetch(`${API}/google-login`, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => console.log(err));
+};
+
+export const handleResponse = (response) => {
+    if(response.status === 401){
+        signout(() => {
+            Router.push({
+                pathname: '/signin',
+                query: {
+                    message: "Your session is expired, please signin again"
+                }
+            })
+        })        
+    }else {
+        return;
+    }
+}

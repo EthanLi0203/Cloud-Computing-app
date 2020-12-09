@@ -6,3 +6,5 @@ export const API = publicRuntimeConfig.PRODUCTION ? '/api' : 'http://localhost:8
 
 export const APP_NAME = publicRuntimeConfig.APP_NAME;
 
+export const GOOGLE_CLIENT_ID = publicRuntimeConfig.GOOGLE_CLIENT_ID;
+
