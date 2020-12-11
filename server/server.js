@@ -8,6 +8,7 @@ require('dotenv').config()
 
 const indexRoutes = require('./routes/index')
 const authRoutes = require('./routes/auth')
+const addressRoute = require('./routes/smartyAddress')
     // app
 const app = express()
 
@@ -32,6 +33,7 @@ if (process.env.NODE_ENV == "development") {
 //routes
 app.use('/api', indexRoutes)
 app.use('/api', authRoutes)
+app.use('/api', addressRoute)
 
 //port 
 const port = process.env.PORT || 8000
