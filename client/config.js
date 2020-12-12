@@ -7,4 +7,5 @@ export const API = publicRuntimeConfig.PRODUCTION ? publicRuntimeConfig.API_PROD
 export const APP_NAME = publicRuntimeConfig.APP_NAME;
 
 export const GOOGLE_CLIENT_ID = publicRuntimeConfig.GOOGLE_CLIENT_ID;
+export const SMARTYSTREETKEY ="9037747506370520" ;
 

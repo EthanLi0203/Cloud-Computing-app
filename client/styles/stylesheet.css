@@ -1,0 +1,8 @@
+@import '~antd/dist/antd.css';
+.search-bar {
+    width: 750px;
+    margin-bottom: 30px;
+}
+.address-option {
+    font-size: 15px;
+}
