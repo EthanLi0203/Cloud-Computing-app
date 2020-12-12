@@ -15,9 +15,9 @@ const SigninComponent = () => {
 
     const { email, password, error, loading, message, showForm } = values;
 
-    useEffect(() => {
-        isAuth() && Router.push(`/`);
-    }, []);
+    // useEffect(() => {
+    //     isAuth() && Router.push(`/`);
+    // }, []);
 
     const handleSubmit = e => {
         e.preventDefault();
