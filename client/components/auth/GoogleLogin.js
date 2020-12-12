@@ -7,7 +7,7 @@ import GoogleLogin from 'react-google-login'
 
 const LoginGoogle = () => {
     const responseGoogle = response => {
-        console.log(response);
+        console.log("google response", response);
         const tokenId = response.tokenId;
         const user = {tokenId};
         loginWithGoogle(user).then(data => {
