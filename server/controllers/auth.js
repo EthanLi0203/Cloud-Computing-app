@@ -7,8 +7,9 @@ const {OAuth2Client} = require('google-auth-library')
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 exports.googleLogin = (req, res) => {
     const idToken = req.body.tokenId;
+    console.log("back", idToken)
     client.verifyIdToken({idToken, audience: process.env.GOOGLE_CLIENT_ID}).then(response => {
-        console.log(response)
+        console.log("response", response)
         const {email_verified, name, email, jti} = response.payload;
         if(email_verified){
             User.findOne({email}).exec((err, user) => {
@@ -74,7 +75,7 @@ exports.signup = (req, res) => {
 
 exports.signin = (req, res) => {
     const { email, password } = req.body;
-
+console.log(email)
     //check if user exist
     User.findOne({ email }).exec((err, user) => {
         if (err || !user) {
@@ -89,7 +90,7 @@ exports.signin = (req, res) => {
             })
         }
         //generate JWT and send to client side
-        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+        const token = jwt.sign({ _id: user._id, email: user.email, role: user.role == 0 ? "USER" : "ADMIN" }, process.env.JWT_SECRET, {
             expiresIn: '3d'
         })
 
