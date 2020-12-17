@@ -109,12 +109,12 @@ console.log(email)
                 error: "User with the email does not exist, please signup first"
             })
         }
-        //check status
-        if(user.status !== 'VERIFIED'){
-            return res.status(401).json({
-                error: "Verify Your Account First"
-            })
-        }
+        // //check status
+        // if(user.status !== 'VERIFIED'){
+        //     return res.status(401).json({
+        //         error: "Verify Your Account First"
+        //     })
+        // }
         //authenticate
         if (!user.authenticate(password)) {
             return res.status(400).json({
