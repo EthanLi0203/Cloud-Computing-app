@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import cookie from 'js-cookie';
 import { API } from '../config';
+import jwt from 'jsonwebtoken'
 
 export const signup = user => {
     return fetch(`${API}/signup`, {
@@ -114,6 +115,38 @@ export const loginWithGoogle = user => {
         })
         .catch(err => console.log(err));
 };
+
+export const authSpotify = () => {
+    const token = getCookie("token");
+    if(!token){
+        return "There is no user signed in"
+    }
+    const user = jwt.decode(token);
+    return fetch("http://18.224.76.50:8000/auth/spotify?user_email="+user.email, {
+        method: 'GET',
+    }).then(res => {
+        console.log(res)
+        return res.json();
+    }).catch(err => console.log(err))
+}
+
+export const authYouTube = () => {
+    const token = getCookie("token");
+    if(!token){
+        return "There is no user signed in"
+    }
+    const user = jwt.decode(token);
+    console.log("decode jwt");
+    return fetch("http://18.224.76.50:8000/auth/youtube?user_email="+user.email, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        }
+    }).then(res => {
+        return res.json();
+    }).catch(err => console.log(err))
+}
 
 export const handleResponse = (response) => {
     if(response.status === 401){
