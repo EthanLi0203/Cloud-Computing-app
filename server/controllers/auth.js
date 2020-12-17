@@ -15,7 +15,7 @@ exports.googleLogin = (req, res) => {
             User.findOne({email}).exec((err, user) => {
                 if(user){
                     console.log(user)
-                    const token = jwt.sign({_id: user._id}, process.env.JWT_SECRET, {expiresIn:'1d'})
+                    const token = jwt.sign({_id: user._id, email: user.email, role: user.role == 0? "USER" : "ADMIN"}, process.env.JWT_SECRET, {expiresIn:'1d'})
                     res.cookie('token', token, {expiresIn: '1d'})
                     const {_id, email, name, role, username} = user;
                     return res.json({token, user: {_id, email, name, role, username}})
