@@ -5,8 +5,8 @@ const expressJwt = require('express-jwt')
 const {OAuth2Client} = require('google-auth-library')
 const AWS = require('aws-sdk')
 AWS.config.update({region: 'us-east-2'});
-AWS.config.accessKeyId = 'AKIA5IRLSZT243EXVVZX';
-AWS.config.secretAccessKey = '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';
+AWS.config.accessKeyId = process.env.accessKeyId;
+AWS.config.secretAccessKey = process.env.secretAccessKey;
 
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
