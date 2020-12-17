@@ -11,6 +11,10 @@ const userSchema = new mongoose.Schema({
         index: true,
         lowercase: true
     },
+    status:{
+        type:String, 
+        required: true
+    },
     name: {
         type: String,
         trim: true,
