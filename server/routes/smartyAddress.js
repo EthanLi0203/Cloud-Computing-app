@@ -16,7 +16,6 @@ router.route("/address_rsp/:id").get((req,res)=>{
 router.post('/verifyAddress', requireSignin, (req, res) => {
     Address.findOne({ userId: req.auth._id }).exec((err, address) => {
 
-        console.log(address);
         const {street, city, state, zipcode } = req.body;
         let params = {
             'auth-id':process.env.AUTHID, 
@@ -34,22 +33,27 @@ router.post('/verifyAddress', requireSignin, (req, res) => {
                 newAddress.status= "Error";
             }
             if(response.statusCode ==200){
-                let result = JSON.parse(response.body);
-                if(result.length!=1){
+
+		let result = JSON.parse(response.body);
+                if(result.length==0){
+		    console.log("HI");
                     newAddress.status = "Need More Info";
                 }
-                newAddress.status = "Verified";
-                newAddress['primary_number'] = result[0].components.primary_number;
-                newAddress['street_name'] = result[0].components.street_name;
-                newAddress['street_suffix'] = result[0].components.street_suffix;
-                newAddress['city_name'] = result[0].components.city_name;
-                newAddress['state_abbreviation'] = result[0].components.zipcode;
-                newAddress['zipcode'] = result[0].components.zipcode;
+		else{
+                    newAddress.status = "Verified";
+                    newAddress['primary_number'] = result[0].components.primary_number;
+                    newAddress['street_name'] = result[0].components.street_name;
+                    newAddress['street_suffix'] = result[0].components.street_suffix;
+                    newAddress['city_name'] = result[0].components.city_name;
+                    newAddress['state_abbreviation'] = result[0].components.zipcode;
+                    newAddress['zipcode'] = result[0].components.zipcode;
+		}
             }
             let add = null;
-            if(address){
+            if(address && result.length!=0){
                 add = address;
-                add.primary_number = newAddress.primary_number;
+                add.status = newAddress.status;
+		add.primary_number = newAddress.primary_number;
                 add.street_name = newAddress.street_name;
                 add.street_suffix = newAddress.street_suffix;
                 add.city_name = newAddress.city_name;
@@ -59,13 +63,15 @@ router.post('/verifyAddress', requireSignin, (req, res) => {
             else{
                 add= new Address(newAddress);
             }
+		    console.log(add);
             add.save((err, success)=>{
                 if(err){
                     return res.status(400).json({
                         error:err
                     })
                 }
-                res.status(201).location(`http://${process.env.CLIENT_URL}:${process.env.Port}/api/address_rsp/${add._id}`).json();
+		
+                res.status(201).location(`http://18.191.173.55:8000/api/address_rsp/${add._id}`).json("ok");
             })
           });
     })

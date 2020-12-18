@@ -3,7 +3,8 @@ import { AutoComplete, Button, Input} from 'antd';
 import * as SmartyStreetsSDK from "smartystreets-javascript-sdk";
 import axios from 'axios';
 import { SMARTYSTREETKEY } from '../config';
-import {getCookie} from '../actions/auth'
+import {getCookie} from '../actions/auth';
+import {API} from '../config';
 
 const Option = AutoComplete.Option;
 
@@ -56,7 +57,7 @@ class SearchBar extends React.Component {
             return "There is no user signed in"
         }
         const config = {
-            headers: { Authorization: `Bearer ${token}` }
+            headers: { Authorization:`Bearer ${token}`}
         }
         axios.post(`${API}/verifyAddress`, this.state.address, config)
             .then(response => {
