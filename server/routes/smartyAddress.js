@@ -35,8 +35,7 @@ router.post('/verifyAddress', requireSignin, (req, res) => {
             if(response.statusCode ==200){
 
 		let result = JSON.parse(response.body);
-                if(result.length==0){
-		    console.log("HI");
+		if(result.length==0){
                     newAddress.status = "Need More Info";
                 }
 		else{
@@ -50,20 +49,21 @@ router.post('/verifyAddress', requireSignin, (req, res) => {
 		}
             }
             let add = null;
-            if(address && result.length!=0){
+            if(address){
                 add = address;
                 add.status = newAddress.status;
-		add.primary_number = newAddress.primary_number;
-                add.street_name = newAddress.street_name;
-                add.street_suffix = newAddress.street_suffix;
-                add.city_name = newAddress.city_name;
-                add.state_abbreviation = newAddress.state_abbreviation;
-                add.zipcode = newAddress.zipcode;
+		if(result.length!=0){
+		    add.primary_number = newAddress.primary_number;
+                    add.street_name = newAddress.street_name;
+                    add.street_suffix = newAddress.street_suffix;
+                    add.city_name = newAddress.city_name;
+                    add.state_abbreviation = newAddress.state_abbreviation;
+                    add.zipcode = newAddress.zipcode;
+		}
             }
             else{
                 add= new Address(newAddress);
             }
-		    console.log(add);
             add.save((err, success)=>{
                 if(err){
                     return res.status(400).json({
