@@ -3,7 +3,7 @@ import { AutoComplete, Button, Input} from 'antd';
 import * as SmartyStreetsSDK from "smartystreets-javascript-sdk";
 import axios from 'axios';
 import { SMARTYSTREETKEY } from '../config';
-import {getCookie} from '../../actions/auth'
+import {getCookie} from '../actions/auth'
 
 const Option = AutoComplete.Option;
 
