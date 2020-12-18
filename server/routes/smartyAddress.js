@@ -14,17 +14,13 @@ router.route("/address_rsp/:id").get((req,res)=>{
 
 
 router.post('/verifyAddress', requireSignin, (req, res) => {
-    Address.findOne({ userID: req.auth._id }).exec((err, address) => {
+    Address.findOne({ userId: req.auth._id }).exec((err, address) => {
 
-        const {auth_id, auth_token, address_url, street, city, state, zipcode } = req.body;
-        if(auth_id ==null || auth_token ==null || address_url ==null)
-            return res.status(500).json({
-                message:"couldn't get security info"
-            });
-        
+        console.log(address);
+        const {street, city, state, zipcode } = req.body;
         let params = {
-            'auth-id':auth_id, 
-            'auth-token':auth_token,
+            'auth-id':process.env.AUTHID, 
+            'auth-token':process.env.AUTHTOKEN,
             street: street,
             city: city, 
             state: state, 
@@ -33,7 +29,7 @@ router.post('/verifyAddress', requireSignin, (req, res) => {
 
         let status = "pending";
         let newAddress = {userId: req.auth._id, status }
-        request({url:address_url, qs:params}, function(err, response, body) {
+        request({url:"https://us-street.api.smartystreets.com/street-address", qs:params}, function(err, response, body) {
             if(err) { 
                 newAddress.status= "Error";
             }

@@ -1,6 +1,6 @@
 import Layout from '../components/Layout';
 import SearchBar from '../components/SearchBar';
-const Signin = () => {
+const SmartAddress = () => {
     return (
         <Layout>
             <h2 className="text-center pt-4 pb-4">Address</h2>
@@ -13,4 +13,4 @@ const Signin = () => {
     );
 };
 
-export default Signin;
+export default SmartAddress;

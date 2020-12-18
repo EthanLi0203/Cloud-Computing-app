@@ -7,10 +7,6 @@ const Index = () =>
         <Link href='/signin'>
             <a>Signin</a>
         </Link>
-        <br></br>
-        <Link href='/smartyAddress'>
-            <a>Address</a>
-        </Link>
     </Layout>
 )
 

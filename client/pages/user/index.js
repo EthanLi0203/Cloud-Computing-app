@@ -55,6 +55,12 @@ const UserIndex = () => {
             <div>
                 <button className="btn btn-secondary" onClick={getYouTube}>Authorize YouTube</button>
             </div>
+            <br/>
+            <div>
+                <Link href='/smartyAddress'>
+                    <button className="btn btn-primary">Add Address</button>
+                </Link>
+            </div>
         </Layout>
     );
 };
