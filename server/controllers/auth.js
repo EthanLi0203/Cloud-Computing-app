@@ -3,6 +3,11 @@ const shortId = require('shortid')
 const jwt = require('jsonwebtoken')
 const expressJwt = require('express-jwt')
 const {OAuth2Client} = require('google-auth-library')
+const AWS = require('aws-sdk')
+AWS.config.update({region: 'us-east-2'});
+AWS.config.accessKeyId = process.env.accessKeyId;
+AWS.config.secretAccessKey = process.env.secretAccessKey;
+
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 exports.googleLogin = (req, res) => {
@@ -56,18 +61,39 @@ exports.signup = (req, res) => {
 
         const { name, email, password } = req.body
         let username = shortId.generate()
+        let status = "PENDING";
         let profile = `${process.env.CLIENT_URL}/profile/${username}`;
-        let newUser = new User({ name, email, password, profile, username })
+        let newUser = new User({ status, name, email, password, profile, username })
 
+        
         newUser.save((err, success) => {
             if (err) {
                 return res.status(400).json({
                     error: err
                 })
             }
-            res.json({
-                message: 'Signup success! Please return to signin.'
-            })
+            var params = {
+                Message:JSON.stringify({
+                    email:email, 
+                    name:name, 
+                    id:success._id
+                }),
+                TopicArn: 'arn:aws:sns:us-east-2:911698218229:user_change'
+                
+            }
+            var publishTextPromise = new AWS.SNS({apiVersion: '2010-03-31'}).publish(params).promise();
+            publishTextPromise.then(
+                function(data){
+                    res.json({
+                        message: "Please Check Your Email for Verification"
+                    })
+                }).catch(
+                function(err){
+                    console.error(err, err.stack);
+                    res.status(400).json({
+                        message: err.stack
+                    })
+                });
         })
     })
 
@@ -83,6 +109,12 @@ console.log(email)
                 error: "User with the email does not exist, please signup first"
             })
         }
+        // //check status
+        // if(user.status !== 'VERIFIED'){
+        //     return res.status(401).json({
+        //         error: "Verify Your Account First"
+        //     })
+        // }
         //authenticate
         if (!user.authenticate(password)) {
             return res.status(400).json({
@@ -103,6 +135,19 @@ console.log(email)
         })
 
     })
+}
+
+exports.verify = (req, res)=>{
+    User.findById(req.params.id)
+    .then(user=>{
+        user.status = req.body.status;
+        user.save()
+        .then(()=>{
+                res.json('User Status Updated')
+        })
+        .catch(err=>res.status(400).json('Error: ' +err));
+    })
+    .catch(err => res.status(400).json('Error: ' + err));
 }
 
 exports.signout = (req, res) => {

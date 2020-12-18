@@ -13,7 +13,7 @@ const addressRoute = require('./routes/smartyAddress')
 const app = express()
 
 // db
-mongoose.connect(process.env.DATABASE_CLOUD, {
+mongoose.connect(process.env.testCloud, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
